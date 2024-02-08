@@ -10,7 +10,7 @@ import {
 import { useParams } from "react-router-dom";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
-import { Grid } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 import toast, { Toaster } from "react-hot-toast";
 
 function classNames(...classes) {
@@ -55,15 +55,16 @@ export default function ProductDetail() {
     <>
       <div className="bg-white">
         {status === "loading" ? (
-          <Grid
+          <RotatingLines
+            visible={true}
             height="80"
             width="80"
-            color="rgb(79, 70, 229) "
-            ariaLabel="grid-loading"
-            radius="12.5"
+            strokeColor="rgb(79, 70, 229)"
+            strokeWidth="2"
+            animationDuration="0.75"
+            ariaLabel="rotating-lines-loading"
             wrapperStyle={{}}
             wrapperClass=""
-            visible={true}
           />
         ) : null}
         {product && (

@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
 import { useAlert } from "react-alert";
-import { Grid } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -55,15 +55,16 @@ export default function AdminProductDetail() {
   return (
     <div className="bg-white">
       {status === "loading" ? (
-        <Grid
+        <RotatingLines
+          visible={true}
           height="80"
           width="80"
-          color="rgb(79, 70, 229) "
-          ariaLabel="grid-loading"
-          radius="12.5"
+          strokeColor="rgb(79, 70, 229)"
+          strokeWidth="2"
+          animationDuration="0.75"
+          ariaLabel="rotating-lines-loading"
           wrapperStyle={{}}
           wrapperClass=""
-          visible={true}
         />
       ) : null}
       {product && (

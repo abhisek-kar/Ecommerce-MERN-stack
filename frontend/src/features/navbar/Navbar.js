@@ -41,7 +41,7 @@ function NavBar({ children }) {
                 <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
                   <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0">
+                      <div className="flex items-center  ">
                         <Link to="/">
                           <img
                             className="h-8 w-8"
@@ -49,6 +49,9 @@ function NavBar({ children }) {
                             alt="Your Company"
                           />
                         </Link>
+                        <div className="text-white text-xl font-bold  ">
+                          Ecommerce
+                        </div>
                       </div>
                       <div className="hidden md:block">
                         <div className="ml-10 flex items-baseline space-x-4">
@@ -226,17 +229,8 @@ function NavBar({ children }) {
             )}
           </Disclosure>
 
-          <header className="bg-white shadow">
-            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-                E-Commerce
-              </h1>
-            </div>
-          </header>
           <main>
-            <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-              {children}
-            </div>
+            <div className="mx-auto max-w-7xl  ">{children}</div>
           </main>
         </div>
       )}

@@ -15,7 +15,7 @@ import {
   selectStatus,
 } from "../features/order/orderSlice";
 import { selectUserInfo } from "../features/user/userSlice";
-import { Grid } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -44,6 +44,7 @@ function Checkout() {
 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
+  const [showAddressForm, setShowAddressForm] = useState(false);
 
   const handleQuantity = (e, item) => {
     dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }));
@@ -96,15 +97,16 @@ function Checkout() {
       )}
 
       {status === "loading" ? (
-        <Grid
+        <RotatingLines
+          visible={true}
           height="80"
           width="80"
-          color="rgb(79, 70, 229) "
-          ariaLabel="grid-loading"
-          radius="12.5"
+          strokeColor="rgb(79, 70, 229)"
+          strokeWidth="2"
+          animationDuration="0.75"
+          ariaLabel="rotating-lines-loading"
           wrapperStyle={{}}
           wrapperClass=""
-          visible={true}
         />
       ) : (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -204,219 +206,235 @@ function Checkout() {
                 </div>
               </div>
               {/* This form is for address */}
-              <form
-                className="bg-white px-5 py-12 mt-12"
-                noValidate
-                onSubmit={handleSubmit((data) => {
-                  console.log(data);
-                  dispatch(
-                    updateUserAsync({
-                      ...user,
-                      addresses: [...user.addresses, data],
-                    })
-                  );
-                  reset();
-                })}
-              >
-                <div className="space-y-12">
-                  <div className="border-b border-gray-900/10 pb-12">
-                    <h2 className="text-2xl font-semibold leading-7 text-gray-900">
-                      Add a New Address
-                    </h2>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">
-                      Use a permanent address where you can receive mail.
-                    </p>
+              {showAddressForm ? (
+                <form
+                  className="bg-white px-5 py-12 mt-12"
+                  noValidate
+                  onSubmit={handleSubmit((data) => {
+                    console.log(data);
+                    dispatch(
+                      updateUserAsync({
+                        ...user,
+                        addresses: [...user.addresses, data],
+                      })
+                    );
+                    reset();
+                    setShowAddressForm(false);
+                  })}
+                >
+                  <div className="space-y-12">
+                    <div className="border-b border-gray-900/10 pb-12">
+                      <h2 className="text-2xl font-semibold leading-7 text-gray-900">
+                        Add a New Address
+                      </h2>
+                      <p className="mt-1 text-sm leading-6 text-gray-600">
+                        Use a permanent address where you can receive mail.
+                      </p>
 
-                    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                      <div className="sm:col-span-4">
-                        <label
-                          htmlFor="name"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Full name
-                        </label>
-                        <div className="mt-2">
-                          <input
-                            type="text"
-                            {...register("name", {
-                              required: "name is required",
-                            })}
-                            id="name"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                          {errors.name && (
-                            <p className="text-red-500">
-                              {errors.name.message}
-                            </p>
-                          )}
+                      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div className="sm:col-span-4">
+                          <label
+                            htmlFor="name"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Full name
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              type="text"
+                              {...register("name", {
+                                required: "name is required",
+                              })}
+                              id="name"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                            {errors.name && (
+                              <p className="text-red-500">
+                                {errors.name.message}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="sm:col-span-4">
-                        <label
-                          htmlFor="email"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Email address
-                        </label>
-                        <div className="mt-2">
-                          <input
-                            id="email"
-                            {...register("email", {
-                              required: "email is required",
-                            })}
-                            type="email"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                          {errors.email && (
-                            <p className="text-red-500">
-                              {errors.email.message}
-                            </p>
-                          )}
+                        <div className="sm:col-span-4">
+                          <label
+                            htmlFor="email"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Email address
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="email"
+                              {...register("email", {
+                                required: "email is required",
+                              })}
+                              type="email"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                            {errors.email && (
+                              <p className="text-red-500">
+                                {errors.email.message}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="sm:col-span-3">
-                        <label
-                          htmlFor="phone"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Phone
-                        </label>
-                        <div className="mt-2">
-                          <input
-                            id="phone"
-                            {...register("phone", {
-                              required: "phone is required",
-                            })}
-                            type="tel"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                          {errors.phone && (
-                            <p className="text-red-500">
-                              {errors.phone.message}
-                            </p>
-                          )}
+                        <div className="sm:col-span-3">
+                          <label
+                            htmlFor="phone"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Phone
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="phone"
+                              {...register("phone", {
+                                required: "phone is required",
+                              })}
+                              type="tel"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                            {errors.phone && (
+                              <p className="text-red-500">
+                                {errors.phone.message}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="col-span-full">
-                        <label
-                          htmlFor="street-address"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Street address
-                        </label>
-                        <div className="mt-2">
-                          <input
-                            type="text"
-                            {...register("street", {
-                              required: "street is required",
-                            })}
-                            id="street"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                          {errors.street && (
-                            <p className="text-red-500">
-                              {errors.street.message}
-                            </p>
-                          )}
+                        <div className="col-span-full">
+                          <label
+                            htmlFor="street-address"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Street address
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              type="text"
+                              {...register("street", {
+                                required: "street is required",
+                              })}
+                              id="street"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                            {errors.street && (
+                              <p className="text-red-500">
+                                {errors.street.message}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="sm:col-span-2 sm:col-start-1">
-                        <label
-                          htmlFor="city"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          City
-                        </label>
-                        <div className="mt-2">
-                          <input
-                            type="text"
-                            {...register("city", {
-                              required: "city is required",
-                            })}
-                            id="city"
-                            autoComplete="address-level2"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                          {errors.city && (
-                            <p className="text-red-500">
-                              {errors.city.message}
-                            </p>
-                          )}
+                        <div className="sm:col-span-2 sm:col-start-1">
+                          <label
+                            htmlFor="city"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            City
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              type="text"
+                              {...register("city", {
+                                required: "city is required",
+                              })}
+                              id="city"
+                              autoComplete="address-level2"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                            {errors.city && (
+                              <p className="text-red-500">
+                                {errors.city.message}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="sm:col-span-2">
-                        <label
-                          htmlFor="state"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          State / Province
-                        </label>
-                        <div className="mt-2">
-                          <input
-                            type="text"
-                            {...register("state", {
-                              required: "state is required",
-                            })}
-                            id="state"
-                            autoComplete="address-level1"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                          {errors.state && (
-                            <p className="text-red-500">
-                              {errors.state.message}
-                            </p>
-                          )}
+                        <div className="sm:col-span-2">
+                          <label
+                            htmlFor="state"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            State / Province
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              type="text"
+                              {...register("state", {
+                                required: "state is required",
+                              })}
+                              id="state"
+                              autoComplete="address-level1"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                            {errors.state && (
+                              <p className="text-red-500">
+                                {errors.state.message}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="sm:col-span-2">
-                        <label
-                          htmlFor="pinCode"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          ZIP / Postal code
-                        </label>
-                        <div className="mt-2">
-                          <input
-                            type="text"
-                            {...register("pinCode", {
-                              required: "pinCode is required",
-                            })}
-                            id="pinCode"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          />
-                          {errors.pinCode && (
-                            <p className="text-red-500">
-                              {errors.pinCode.message}
-                            </p>
-                          )}
+                        <div className="sm:col-span-2">
+                          <label
+                            htmlFor="pinCode"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            ZIP / Postal code
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              type="text"
+                              {...register("pinCode", {
+                                required: "pinCode is required",
+                              })}
+                              id="pinCode"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                            {errors.pinCode && (
+                              <p className="text-red-500">
+                                {errors.pinCode.message}
+                              </p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button
-                      // onClick={e=>reset()}
-                      type="button"
-                      className="text-sm font-semibold leading-6 text-gray-900"
-                    >
-                      Reset
-                    </button>
-                    <button
-                      type="submit"
-                      className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      Add Address
-                    </button>
+                    <div className="mt-6 flex items-center justify-end gap-x-6">
+                      <button
+                        onClick={(e) => reset()}
+                        type="button"
+                        className="text-sm font-semibold leading-6 text-gray-900"
+                      >
+                        Reset
+                      </button>
+                      <button
+                        type="submit"
+                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      >
+                        Add Address
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
+                </form>
+              ) : (
+                <>
+                  <div className="space-y-12">
+                    <div className="border-b border-gray-900/10 ">
+                      <div
+                        onClick={() => setShowAddressForm(true)}
+                        className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"
+                      >
+                        Add a New Address
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             <div className="lg:col-span-2">
               <div className="mx-auto mt-12 bg-white max-w-7xl px-2 sm:px-2 lg:px-4">

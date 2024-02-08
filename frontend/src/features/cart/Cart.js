@@ -9,7 +9,7 @@ import {
 } from "./cartSlice";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import { Grid, Oval, RotatingLines } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 import Modal from "../common/Modal";
 
 export default function Cart() {
@@ -57,8 +57,8 @@ export default function Cart() {
                   visible={true}
                   height="80"
                   width="80"
-                  color="rgb(79, 70, 229)"
-                  strokeWidth="5"
+                  strokeColor="rgb(79, 70, 229)"
+                  strokeWidth="2"
                   animationDuration="0.75"
                   ariaLabel="rotating-lines-loading"
                   wrapperStyle={{}}
