@@ -32,7 +32,9 @@ import { positions, Provider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import StripeCheckout from "./pages/StripeCheckout";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+
 import toast, { Toaster } from "react-hot-toast";
+import { selectOrders } from "./features/order/orderSlice";
 
 const options = {
   timeout: 5000,
@@ -174,6 +176,7 @@ function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
   const userChecked = useSelector(selectUserChecked);
+  const orders = useSelector(selectOrders);
 
   useEffect(() => {
     dispatch(checkAuthAsync());
@@ -185,7 +188,7 @@ function App() {
       // we can get req.user by token on backend so no need to give in front-end
       dispatch(fetchLoggedInUserAsync());
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, orders]);
 
   return (
     <>

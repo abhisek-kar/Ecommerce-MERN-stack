@@ -3,7 +3,7 @@ import { API } from "../../services/API";
 export function fetchLoggedInUserOrders() {
   return new Promise(async (resolve, reject) => {
     try {
-      const { data } = await fetch("/order/own/");
+      const { data } = await API.get("/order/own");
       if (data.success) {
         resolve(data);
       } else {

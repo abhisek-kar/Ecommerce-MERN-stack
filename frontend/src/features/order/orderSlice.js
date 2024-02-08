@@ -13,7 +13,7 @@ export const createOrderAsync = createAsyncThunk(
   async (order, { rejectWithValue }) => {
     try {
       const data = await createOrder(order);
-      console.log(data);
+      console.log(data, "jhhhh");
       return data;
     } catch (error) {
       rejectWithValue(error?.response?.data?.message || error?.message);
@@ -64,6 +64,9 @@ export const orderSlice = createSlice({
         state.orders.push(payload?.newOrder);
         state.currentOrder = payload?.newOrder;
       })
+      .addCase(createOrderAsync.rejected, (state) => {
+        state.status = "idle";
+      })
       .addCase(fetchAllOrdersAsync.pending, (state) => {
         state.status = "loading";
       })
@@ -71,6 +74,9 @@ export const orderSlice = createSlice({
         state.status = "idle";
         state.orders = payload.orders;
         state.totalOrders = payload.totalOrders;
+      })
+      .addCase(fetchAllOrdersAsync.rejected, (state) => {
+        state.status = "idle";
       })
       .addCase(updateOrderAsync.pending, (state) => {
         state.status = "loading";
@@ -81,6 +87,9 @@ export const orderSlice = createSlice({
           (order) => order.id === payload.order.id
         );
         state.orders[index] = payload.order;
+      })
+      .addCase(updateOrderAsync.rejected, (state) => {
+        state.status = "idle";
       });
   },
 });

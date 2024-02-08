@@ -9,7 +9,7 @@ import {
 } from "./cartSlice";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import { Grid } from "react-loader-spinner";
+import { Grid, Oval, RotatingLines } from "react-loader-spinner";
 import Modal from "../common/Modal";
 
 export default function Cart() {
@@ -53,15 +53,16 @@ export default function Cart() {
             </h1>
             <div className="flow-root">
               {status === "loading" ? (
-                <Grid
+                <RotatingLines
+                  visible={true}
                   height="80"
                   width="80"
-                  color="rgb(79, 70, 229) "
-                  ariaLabel="grid-loading"
-                  radius="12.5"
+                  color="rgb(79, 70, 229)"
+                  strokeWidth="5"
+                  animationDuration="0.75"
+                  ariaLabel="rotating-lines-loading"
                   wrapperStyle={{}}
                   wrapperClass=""
-                  visible={true}
                 />
               ) : null}
               <ul className="-my-6 divide-y divide-gray-200">

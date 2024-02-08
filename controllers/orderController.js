@@ -1,7 +1,9 @@
+const sendEmail = require("../configs/nodemailer");
 const OrderModel = require("../models/Order");
+const CartModel = require("../models/Cart");
 const ProductModel = require("../models/Product");
 const UserModel = require("../models/User");
-const { sendMail, invoiceTemplate } = require("../services/common");
+const { invoiceTemplate } = require("../services/common");
 
 exports.fetchOrdersByUserController = async (req, res) => {
   try {
@@ -47,21 +49,26 @@ exports.createOrderController = async (req, res) => {
     // }
 
     await newOrder.save();
-    // const user = await UserModel.findById(order.user);
+    const user = await UserModel.findById(newOrder.user);
+    console.log("hi");
     // we can use await for this also
-    // sendMail({
-    //   to: user.email,
-    //   html: invoiceTemplate(order),
-    //   subject: "Order Received",
-    //   newOrder,
-    // });
-
+    sendEmail({
+      to: user.email,
+      html: invoiceTemplate(newOrder),
+      subject: "Order Received",
+      newOrder,
+    });
+    // empty the cart of user
+    const { id } = req.user;
+    const x = await CartModel.deleteMany({ user: id });
+    console.log(x);
     return res.status(201).json({
       success: true,
       message: "Orders Created Successfully",
       newOrder,
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({
       success: false,
       message: "Error In Create Order API",

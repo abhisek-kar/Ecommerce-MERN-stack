@@ -5,8 +5,8 @@ const {
   fetchAllOrdersController,
   cancelOrderController,
   fetchOrdersByUserController,
+  updateOrderController,
 } = require("../controllers/orderController");
-const { updateCartController } = require("../controllers/cartController");
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.get("/own", isAuthenticated, fetchOrdersByUserController);
 router.delete("/:id", isAuthenticated, cancelOrderController);
 
 // update Order || PATCH || user
-router.patch("/:id", isAuthenticated, updateCartController);
+router.patch("/:id", isAuthenticated, updateOrderController);
 
 // create Order || GET || Admin
 router.get("/", isAuthenticated, isAdmin, fetchAllOrdersController);

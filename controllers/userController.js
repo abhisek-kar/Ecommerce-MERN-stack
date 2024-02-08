@@ -27,13 +27,6 @@ exports.fetchUserByIdController = async (req, res) => {
 
 exports.updateUserController = async (req, res) => {
   try {
-    // const { id } = req.params;
-    // if (!id) {
-    //   return res.status(401).json({
-    //     success: false,
-    //     message: "No ID Provided",
-    //   });
-    // }
     const { id } = req.user;
     if (!id) {
       return res.status(401).json({
@@ -49,9 +42,10 @@ exports.updateUserController = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Updated User Details Successfully",
-      id: user.id,
-      addresses: user.addresses,
-      email: user.email,
+      user: {
+        addresses: user.addresses,
+        email: user.email,
+      },
     });
   } catch (err) {
     return res.status(500).json({
